@@ -8,17 +8,18 @@ const music = new Audio("/sounds/mugunghwa.mp3");
 music.loop = true;
 
 function RedLightGreenLight({ onWin, mascot }) {
-  const [light, setLight] = useState("green");
+  const [light, setLight] = useState("off"); // "off", "green", "red"
   const [position, setPosition] = useState(0);
   const [gameOver, setGameOver] = useState(false);
   const [timeLeft, setTimeLeft] = useState(30);
   const [isStarted, setIsStarted] = useState(false);
+  const [countdown, setCountdown] = useState(null); // 3 → 2 → 1 → null
   const gunshot = useRef(new Audio("/sounds/gunshot.mp3"));
   const dollRef = useRef(null);
   const mascotImage = mascot === "x" ? mascotX : mascotO;
 
   useEffect(() => {
-    if (!isStarted || gameOver) return;
+    if (!isStarted || gameOver || countdown !== null) return;
 
     let timeout;
 
@@ -44,16 +45,25 @@ function RedLightGreenLight({ onWin, mascot }) {
       timeout = setTimeout(toggleLight, Math.random() * 2000 + 3000);
     };
 
-    toggleLight();
+    // Bắt đầu đèn xanh và bật nhạc sau countdown
+    setLight("green");
+    if (dollRef.current) {
+      dollRef.current.classList.remove("turn", "look");
+      dollRef.current.classList.add("turn");
+    }
+    music.play();
+
+    timeout = setTimeout(toggleLight, Math.random() * 2000 + 3000);
+
     return () => clearTimeout(timeout);
-  }, [isStarted, gameOver]);
+  }, [isStarted, gameOver, countdown]);
 
   useEffect(() => {
-    if (!isStarted || gameOver || timeLeft <= 0) return;
+    if (!isStarted || gameOver || timeLeft <= 0 || countdown !== null) return;
 
     const timer = setTimeout(() => setTimeLeft((t) => t - 1), 1000);
     return () => clearTimeout(timer);
-  }, [timeLeft, gameOver, isStarted]);
+  }, [timeLeft, gameOver, isStarted, countdown]);
 
   useEffect(() => {
     if (timeLeft === 0 && !gameOver) {
@@ -70,6 +80,14 @@ function RedLightGreenLight({ onWin, mascot }) {
       music.currentTime = 0;
     }
   }, [timeLeft, gameOver]);
+
+  useEffect(() => {
+    if (gameOver) {
+      setLight("off");
+      music.pause();
+      music.currentTime = 0;
+    }
+  }, [gameOver]);
 
   const handleRun = () => {
     if (gameOver || !isStarted) return;
@@ -103,19 +121,36 @@ function RedLightGreenLight({ onWin, mascot }) {
   const handleReset = () => {
     setPosition(0);
     setGameOver(false);
-    setLight("green");
+    setLight("off");
     setTimeLeft(30);
-    setIsStarted(true);
+    setIsStarted(false);
+    setCountdown(3);
+
+    music.pause();
     music.currentTime = 0;
-    music.play();
+
+    let count = 3;
+    const interval = setInterval(() => {
+      count--;
+      if (count > 0) {
+        setCountdown(count);
+      } else {
+        clearInterval(interval);
+        setCountdown(null);
+        setIsStarted(true);
+      }
+    }, 1000);
   };
 
   return (
     <div className="game-container">
       <h3>Red Light – Green Light</h3>
+
       <div className="light-box">
         <div className={`circle ${light}`}></div>
       </div>
+
+      {countdown !== null && <div className="countdown">⏳ {countdown}</div>}
 
       <div className="track vertical">
         {/* ✅ Vạch đích nằm riêng */}

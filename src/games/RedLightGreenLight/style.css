@@ -124,7 +124,7 @@ body {
   left: 0;
   width: 100%;
   height: 5px;
-  background: #FFC107;
+  /* background: #FFC107; */
   box-shadow: 0 0 10px #FFC107;
 }
 
@@ -221,7 +221,7 @@ body {
 .doll {
   width: 50px;
   height: auto;
-  animation: doll-bounce 2s infinite ease-in-out;
+  /* animation: doll-bounce 2s infinite ease-in-out; */
 }
 
 .guard {
@@ -278,4 +278,29 @@ body {
   box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
   z-index: 2;
 }
+
+.countdown {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 64px;
+  font-weight: bold;
+  color: #00ffcc;
+  text-shadow: 0 0 10px #00ffcc;
+  animation: pulse 1s ease-in-out infinite;
+  z-index: 999;
+}
+
+@keyframes pulse {
+  0%, 100% { transform: translate(-50%, -50%) scale(1); }
+  50% { transform: translate(-50%, -50%) scale(1.4); }
+}
+
+
+.circle.off {
+  background-color: #444;
+  box-shadow: none;
+}
+
 
