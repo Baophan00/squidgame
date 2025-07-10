@@ -1,0 +1,28 @@
+.select-container {
+  text-align: center;
+  padding: 20px;
+}
+
+.characters {
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+  margin-top: 20px;
+}
+
+.char-box {
+  cursor: pointer;
+  border: 3px solid transparent;
+  border-radius: 12px;
+  padding: 10px;
+  transition: 0.3s;
+}
+
+.char-box:hover {
+  border-color: #000;
+  transform: scale(1.05);
+}
+
+.char-box img {
+  height: 120px;
+}

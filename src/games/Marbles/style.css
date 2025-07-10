@@ -1,0 +1,44 @@
+.marbles-game {
+  padding: 20px;
+  text-align: center;
+}
+
+input {
+  width: 60px;
+  padding: 5px;
+  margin: 10px;
+}
+
+.guess-buttons {
+  margin: 10px;
+}
+
+.guess-buttons button {
+  margin: 5px;
+  padding: 10px 20px;
+  font-weight: bold;
+}
+
+.guess-buttons .active {
+  background-color: #4caf50;
+  color: white;
+}
+
+.result {
+  margin: 15px 0;
+  font-weight: bold;
+}
+
+.reset {
+  background-color: #007bff;
+  color: white;
+  padding: 10px 20px;
+  margin-top: 15px;
+}
+
+.timer {
+  font-size: 18px;
+  font-weight: bold;
+  color: #ff3c00;
+  margin-top: 10px;
+}
