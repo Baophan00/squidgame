@@ -1,25 +1,28 @@
-// src/games/RedLightGreenLight/index.js
 import React, { useState, useEffect, useRef } from "react";
-import "./style.css";
+import styles from "./RedLightGreenLight.module.css";
 import mascotX from "../../assets/images/mascot-x.png";
 import mascotO from "../../assets/images/mascot-o.png";
+import dollImage from "../../assets/images/doll.png";
+import guardImage from "../../assets/images/guard.png";
 
 const music = new Audio("/sounds/mugunghwa.mp3");
 music.loop = true;
 
 function RedLightGreenLight({ onWin, mascot }) {
-  const [light, setLight] = useState("off"); // "off", "green", "red"
+  const [showWinEffect, setShowWinEffect] = useState(false);
+  const [light, setLight] = useState("off");
   const [position, setPosition] = useState(0);
   const [gameOver, setGameOver] = useState(false);
   const [timeLeft, setTimeLeft] = useState(30);
   const [isStarted, setIsStarted] = useState(false);
-  const [countdown, setCountdown] = useState(null); // 3 → 2 → 1 → null
-  const gunshot = useRef(new Audio("/sounds/gunshot.mp3"));
+  const [countdown, setCountdown] = useState(null);
+  const [isFalling, setIsFalling] = useState(false);
+  const [isWinning, setIsWinning] = useState(false);
   const dollRef = useRef(null);
   const mascotImage = mascot === "x" ? mascotX : mascotO;
 
   useEffect(() => {
-    if (!isStarted || gameOver || countdown !== null) return;
+    if (!isStarted || gameOver || countdown !== null || isWinning) return;
 
     let timeout;
 
@@ -45,7 +48,6 @@ function RedLightGreenLight({ onWin, mascot }) {
       timeout = setTimeout(toggleLight, Math.random() * 2000 + 3000);
     };
 
-    // Bắt đầu đèn xanh và bật nhạc sau countdown
     setLight("green");
     if (dollRef.current) {
       dollRef.current.classList.remove("turn", "look");
@@ -56,30 +58,41 @@ function RedLightGreenLight({ onWin, mascot }) {
     timeout = setTimeout(toggleLight, Math.random() * 2000 + 3000);
 
     return () => clearTimeout(timeout);
-  }, [isStarted, gameOver, countdown]);
+  }, [isStarted, gameOver, countdown, isWinning]);
 
   useEffect(() => {
-    if (!isStarted || gameOver || timeLeft <= 0 || countdown !== null) return;
+    if (
+      !isStarted ||
+      gameOver ||
+      timeLeft <= 0 ||
+      countdown !== null ||
+      isWinning
+    )
+      return;
 
     const timer = setTimeout(() => setTimeLeft((t) => t - 1), 1000);
     return () => clearTimeout(timer);
-  }, [timeLeft, gameOver, isStarted, countdown]);
+  }, [timeLeft, gameOver, isStarted, countdown, isWinning]);
 
   useEffect(() => {
-    if (timeLeft === 0 && !gameOver) {
+    if (timeLeft === 0 && !gameOver && !isWinning) {
       setGameOver(true);
-      try {
-        gunshot.current.currentTime = 0;
-        gunshot.current.play().catch(console.warn);
-      } catch (e) {
-        console.error("Audio play failed:", e);
-      }
 
-      setTimeout(() => alert("⏱️ Time's up! 💀 GAME OVER"), 400);
+      const gunshot = new Audio("/sounds/gunshot.mp3");
+      gunshot.play().catch(console.warn);
+
+      setTimeout(() => {
+        setIsFalling(true);
+      }, 600);
+
+      setTimeout(() => {
+        alert("⏱️ Time's up! 💀 GAME OVER");
+      }, 1200);
+
       music.pause();
       music.currentTime = 0;
     }
-  }, [timeLeft, gameOver]);
+  }, [timeLeft, gameOver, isWinning]);
 
   useEffect(() => {
     if (gameOver) {
@@ -90,22 +103,21 @@ function RedLightGreenLight({ onWin, mascot }) {
   }, [gameOver]);
 
   const handleRun = () => {
-    if (gameOver || !isStarted) return;
+    if (gameOver || !isStarted || isWinning) return;
 
     if (light === "red") {
-      try {
-        gunshot.current.currentTime = 0;
-        gunshot.current.play().catch(console.warn);
-        setTimeout(() => {
-          gunshot.current.pause();
-          gunshot.current.currentTime = 0;
-        }, 1000);
-      } catch (e) {
-        console.error("Audio play failed:", e);
-      }
-
       setGameOver(true);
-      setTimeout(() => alert("💀 GAME OVER"), 600);
+
+      const gunshot = new Audio("/sounds/gunshot.mp3");
+      gunshot.play().catch(console.warn);
+
+      setTimeout(() => {
+        setIsFalling(true);
+      }, 600);
+
+      setTimeout(() => {
+        alert("💀 GAME OVER");
+      }, 1200);
     } else {
       const step = 5;
       const newPos = position + step;
@@ -113,7 +125,14 @@ function RedLightGreenLight({ onWin, mascot }) {
 
       if (newPos >= 330) {
         music.pause();
-        onWin();
+        setIsWinning(true);
+        const winSound = new Audio("/sounds/win.mp3");
+        winSound.play().catch(console.warn);
+
+        setTimeout(() => {
+          setIsWinning(false);
+          onWin(); // chuyển màn
+        }, 1500);
       }
     }
   };
@@ -125,6 +144,8 @@ function RedLightGreenLight({ onWin, mascot }) {
     setTimeLeft(30);
     setIsStarted(false);
     setCountdown(3);
+    setIsFalling(false);
+    setIsWinning(false);
 
     music.pause();
     music.currentTime = 0;
@@ -143,50 +164,51 @@ function RedLightGreenLight({ onWin, mascot }) {
   };
 
   return (
-    <div className="game-container">
+    <div className={styles.gameContainer}>
       <h3>Red Light – Green Light</h3>
 
-      <div className="light-box">
-        <div className={`circle ${light}`}></div>
+      <div className={styles.lightBox}>
+        <div className={`${styles.circle} ${styles[light]}`}></div>
       </div>
 
-      {countdown !== null && <div className="countdown">⏳ {countdown}</div>}
+      {countdown !== null && (
+        <div className={styles.countdown}>⏳ {countdown}</div>
+      )}
+      {isWinning && <div className={styles.winBanner}>🎉 YOU WIN! 🎉</div>}
 
-      <div className="track vertical">
-        {/* ✅ Vạch đích nằm riêng */}
-        <div className="finish-line"></div>
+      <div className={`${styles.track} ${styles.vertical}`}>
+        <div className={styles.finishLine}></div>
 
         <img
           src={mascotImage}
-          className="mascot"
+          className={`${styles.mascot} ${isFalling ? styles.fallen : ""}`}
           style={{ bottom: `${position}px` }}
           alt="Player"
         />
 
-        {/* ✅ Búp bê và lính */}
-        <div className="finish-line-vertical">
+        <div className={styles.finishLineVertical}>
           <img
-            src={require("../../assets/images/doll.png")}
+            src={dollImage}
             alt="Doll"
-            className="doll"
+            className={`${styles.doll} turn`}
             ref={dollRef}
           />
           <img
-            src={require("../../assets/images/guard.png")}
+            src={guardImage}
             alt="Guard Left"
-            className="guard left"
+            className={`${styles.guard} ${styles.left}`}
           />
           <img
-            src={require("../../assets/images/guard.png")}
+            src={guardImage}
             alt="Guard Right"
-            className="guard right"
+            className={`${styles.guard} ${styles.right}`}
           />
         </div>
       </div>
 
       <p>⏳ Time left: {timeLeft}s</p>
-      <div className="buttons">
-        <button onClick={handleRun} disabled={gameOver}>
+      <div className={styles.buttons}>
+        <button onClick={handleRun} disabled={gameOver || isWinning}>
           RUN
         </button>
         <button onClick={handleReset}>READY</button>
