@@ -365,7 +365,6 @@
     left: 50% !important;  /* đảm bảo nằm giữa ngang */
     top: 50% !important;
     width: auto !important; /* tránh giới hạn max-width quá nhỏ */
-    transform: translate(calc(-50% + var(--position, 0px)), -50%) !important;
     display: flex;
     justify-content: center;
     gap: 20px; /* khoảng cách giữa 2 nhân vật */
@@ -375,7 +374,7 @@
   .bridge {
     width: 90%;
     gap: 20px;
-    height: 40px;
+    height: 60px;
     top: 65%;
   }
 
