@@ -7,7 +7,7 @@ import Marbles from "./games/Marbles";
 import FinalGame from "./games/FinalGame";
 
 function App() {
-  const [level, setLevel] = useState(3); // ✅ bắt đầu từ level 1
+  const [level, setLevel] = useState(2); // ✅ bắt đầu từ level 1
   const [character, setCharacter] = useState(null); // 🧍‍♂️ chọn nhân vật
 
   const nextLevel = () => setLevel((prev) => prev + 1);
