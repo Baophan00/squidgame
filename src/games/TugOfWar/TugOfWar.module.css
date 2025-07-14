@@ -357,12 +357,36 @@
     height: 220px;
     width: 100%;
     margin: 10px auto;
+    border-width: 2px;
   }
 
   .characters {
     width: 100%;
     max-width: 300px;
     margin: 0 auto;
+  }
+
+  .bridge {
+    width: 90%;
+    gap: 20px;
+    height: 40px;
+    top: 65%;
+  }
+
+  .bridgeSide {
+    width: 45%;
+    height: 30px;
+    font-size: 0.7rem;
+    padding-bottom: 3px;
+  }
+
+  .mascotLeft,
+  .mascotRight {
+    width: 60px;
+  }
+
+  .ropeLine {
+    font-size: 1.5rem;
   }
 
   .keySequence {
@@ -374,6 +398,10 @@
     font-size: 1rem;
     padding: 10px;
     min-width: 40px;
+  }
+
+  .sequence {
+    font-size: 1.2rem;
   }
 
   .virtualKeypad {
@@ -402,6 +430,16 @@
 
   .popupTitle {
     font-size: 1.5rem;
+  }
+
+  .popupButtons {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .popupContinue,
+  .popupExit {
+    width: 100%;
   }
 
   .closePopup {
