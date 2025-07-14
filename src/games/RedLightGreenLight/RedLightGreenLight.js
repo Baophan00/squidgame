@@ -8,8 +8,9 @@ import guardImage from "../../assets/images/guard.png";
 const music = new Audio("/sounds/mugunghwa.mp3");
 music.loop = true;
 
-function RedLightGreenLight({ onWin, mascot }) {
-  const [showWinEffect, setShowWinEffect] = useState(false);
+function RedLightGreenLight({ onWin, onExit, mascot }) {
+  const [showWinPopup, setShowWinPopup] = useState(false);
+  const [showGameOverPopup, setShowGameOverPopup] = useState(false);
   const [light, setLight] = useState("off");
   const [position, setPosition] = useState(0);
   const [gameOver, setGameOver] = useState(false);
@@ -77,7 +78,6 @@ function RedLightGreenLight({ onWin, mascot }) {
   useEffect(() => {
     if (timeLeft === 0 && !gameOver && !isWinning) {
       setGameOver(true);
-
       const gunshot = new Audio("/sounds/gunshot.mp3");
       gunshot.play().catch(console.warn);
 
@@ -86,7 +86,7 @@ function RedLightGreenLight({ onWin, mascot }) {
       }, 600);
 
       setTimeout(() => {
-        alert("⏱️ Time's up! 💀 GAME OVER");
+        setShowGameOverPopup(true);
       }, 1200);
 
       music.pause();
@@ -107,7 +107,6 @@ function RedLightGreenLight({ onWin, mascot }) {
 
     if (light === "red") {
       setGameOver(true);
-
       const gunshot = new Audio("/sounds/gunshot.mp3");
       gunshot.play().catch(console.warn);
 
@@ -116,7 +115,7 @@ function RedLightGreenLight({ onWin, mascot }) {
       }, 600);
 
       setTimeout(() => {
-        alert("💀 GAME OVER");
+        setShowGameOverPopup(true);
       }, 1200);
     } else {
       const step = 5;
@@ -130,8 +129,7 @@ function RedLightGreenLight({ onWin, mascot }) {
         winSound.play().catch(console.warn);
 
         setTimeout(() => {
-          setIsWinning(false);
-          onWin(); // chuyển màn
+          setShowWinPopup(true);
         }, 1500);
       }
     }
@@ -146,6 +144,8 @@ function RedLightGreenLight({ onWin, mascot }) {
     setCountdown(3);
     setIsFalling(false);
     setIsWinning(false);
+    setShowWinPopup(false);
+    setShowGameOverPopup(false);
 
     music.pause();
     music.currentTime = 0;
@@ -174,7 +174,6 @@ function RedLightGreenLight({ onWin, mascot }) {
       {countdown !== null && (
         <div className={styles.countdown}>⏳ {countdown}</div>
       )}
-      {isWinning && <div className={styles.winBanner}>🎉 YOU WIN! 🎉</div>}
 
       <div className={`${styles.track} ${styles.vertical}`}>
         <div className={styles.finishLine}></div>
@@ -211,8 +210,44 @@ function RedLightGreenLight({ onWin, mascot }) {
         <button onClick={handleRun} disabled={gameOver || isWinning}>
           RUN
         </button>
-        <button onClick={handleReset}>READY</button>
+        <button
+          onClick={handleReset}
+          disabled={isStarted || countdown !== null}
+        >
+          READY
+        </button>
       </div>
+
+      {showWinPopup && (
+        <div className={styles.popupOverlay}>
+          <div className={styles.popup}>
+            <h2>🎉 You Won!</h2>
+            <p>Do you want to?</p>
+            <div className={styles.popupButtons}>
+              <button onClick={onWin} className={styles.popupContinue}>
+                Continue
+              </button>
+              <button onClick={onExit} className={styles.popupExit}>
+                Exit
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {showGameOverPopup && (
+        <div className={styles.popupOverlay}>
+          <div className={styles.popup}>
+            <h2>💀 Game Over</h2>
+            <p>You lost!</p>
+            <div className={styles.popupButtons}>
+              <button onClick={onExit} className={styles.popupExit}>
+                Try Again
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
