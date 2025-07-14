@@ -361,9 +361,15 @@
   }
 
   .characters {
-    width: 100%;
-    max-width: 300px;
-    margin: 0 auto;
+    position: absolute;
+    left: 50% !important;  /* đảm bảo nằm giữa ngang */
+    top: 50% !important;
+    width: auto !important; /* tránh giới hạn max-width quá nhỏ */
+    transform: translate(calc(-50% + var(--position, 0px)), -50%) !important;
+    display: flex;
+    justify-content: center;
+    gap: 20px; /* khoảng cách giữa 2 nhân vật */
+    max-width: none !important;
   }
 
   .bridge {
