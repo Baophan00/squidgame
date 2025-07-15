@@ -174,8 +174,8 @@ export default function TugOfWar({ onWin, onExit }) {
 
       <div className={styles.battlefield}>
         <div className={styles.bridge}>
-          <div className={styles.bridgeSide}>Left Side</div>
-          <div className={styles.bridgeSide}>Right Side</div>
+          <div className={styles.bridgeSide}>IRYS</div>
+          <div className={styles.bridgeSide}>IRYS</div>
         </div>
 
         <div
