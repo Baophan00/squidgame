@@ -15,6 +15,7 @@ const KEY_POOL = [
 ];
 const MAX_PULL = 10;
 const PULL_UNIT = 10; // px per move
+const DESKTOP_WIDTH = 700; // width battlefield desktop (theo CSS thiết kế)
 
 function getRandomSequence(length = 4) {
   return Array.from(
@@ -23,18 +24,25 @@ function getRandomSequence(length = 4) {
   );
 }
 
+function getScaledOffset(position) {
+  const screenWidth = window.innerWidth;
+  const scale = screenWidth < DESKTOP_WIDTH ? screenWidth / DESKTOP_WIDTH : 1;
+  return position * PULL_UNIT * scale;
+}
+
 export default function TugOfWar({ onWin, onExit }) {
   const [gameStarted, setGameStarted] = useState(false);
   const [countdown, setCountdown] = useState(0);
   const [sequence, setSequence] = useState([]);
   const [input, setInput] = useState([]);
   const [position, setPosition] = useState(0);
+  const [scaledOffset, setScaledOffset] = useState(0);
   const [result, setResult] = useState(null);
   const [showWinPopup, setShowWinPopup] = useState(false);
   const [showGameOverPopup, setShowGameOverPopup] = useState(false);
   const [feedback, setFeedback] = useState(null);
   const [nearFall, setNearFall] = useState(false);
-  const [fallAnimation, setFallAnimation] = useState(null); // NEW: fall animation state
+  const [fallAnimation, setFallAnimation] = useState(null);
 
   const winAudio = useRef(null);
   const lostAudio = useRef(null);
@@ -43,6 +51,17 @@ export default function TugOfWar({ onWin, onExit }) {
     winAudio.current = new Audio("/sounds/win.mp3");
     lostAudio.current = new Audio("/sounds/lost.mp3");
   }, []);
+
+  // Update scaledOffset khi position hoặc kích thước màn thay đổi
+  useEffect(() => {
+    function updateOffset() {
+      setScaledOffset(getScaledOffset(position));
+    }
+    updateOffset();
+
+    window.addEventListener("resize", updateOffset);
+    return () => window.removeEventListener("resize", updateOffset);
+  }, [position]);
 
   function startGame() {
     setCountdown(3);
@@ -122,14 +141,12 @@ export default function TugOfWar({ onWin, onExit }) {
     setNearFall(false);
 
     if (resultType === "win") {
-      // AI lose → fallLeft animation
       setFallAnimation("aiFallLeft");
       winAudio.current?.play();
       setTimeout(() => {
         setShowWinPopup(true);
       }, 1200);
     } else {
-      // Player lose → fallRight animation
       setFallAnimation("playerFallRight");
       lostAudio.current?.play();
       setTimeout(() => {
@@ -166,9 +183,7 @@ export default function TugOfWar({ onWin, onExit }) {
           style={{
             left: "50%",
             top: "50%",
-            transform: `translate(calc(-50% + ${
-              position * PULL_UNIT
-            }px), -50%)`,
+            transform: `translate(calc(-50% + ${scaledOffset}px), -50%)`,
           }}
         >
           <img
