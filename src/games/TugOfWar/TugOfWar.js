@@ -166,11 +166,15 @@ export default function TugOfWar({ onWin, onExit }) {
 
       {countdown > 0 && <div className={styles.countdown}>{countdown}</div>}
 
-      {nearFall && (
-        <div className={styles.nearFallWarning}>
-          ⚠️ Watch out! You're close to the edge!
+      <div className={styles.nearFallContainer}>
+        <div
+          className={`${styles.nearFallWarning} ${
+            nearFall ? styles.visible : styles.hidden
+          }`}
+        >
+          ⚠️ Watch out!
         </div>
-      )}
+      </div>
 
       <div className={styles.battlefield}>
         <div className={styles.bridge}>
