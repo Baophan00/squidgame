@@ -46,10 +46,12 @@ export default function TugOfWar({ onWin, onExit }) {
 
   const winAudio = useRef(null);
   const lostAudio = useRef(null);
+  const screamAudio = useRef(null);
 
   useEffect(() => {
     winAudio.current = new Audio("/sounds/win.mp3");
     lostAudio.current = new Audio("/sounds/lost.mp3");
+    screamAudio.current = new Audio("/sounds/scream.mp3");
   }, []);
 
   // Update scaledOffset khi position hoặc kích thước màn thay đổi
@@ -148,7 +150,13 @@ export default function TugOfWar({ onWin, onExit }) {
       }, 1200);
     } else {
       setFallAnimation("playerFallRight");
-      lostAudio.current?.play();
+
+      // Phát tiếng hét rồi mới phát tiếng thua
+      screamAudio.current?.play();
+      setTimeout(() => {
+        lostAudio.current?.play();
+      }, 400); // Delay để scream nghe rõ
+
       setTimeout(() => {
         setShowGameOverPopup(true);
       }, 1200);
