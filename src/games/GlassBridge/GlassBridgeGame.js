@@ -117,8 +117,14 @@ function GlassBridgeGame({ onWin, onExit, mascot }) {
     setHasWon(false);
   };
 
+  // const generateBridge = () => {
+  //   return Array(bridgeLength).fill("right");
+  // };
+
   const generateBridge = () => {
-    return Array(bridgeLength).fill("right");
+    return Array.from({ length: bridgeLength }, () =>
+      Math.random() < 0.5 ? "left" : "right"
+    );
   };
 
   const handleReady = () => {
@@ -164,134 +170,140 @@ function GlassBridgeGame({ onWin, onExit, mascot }) {
   };
 
   return (
-    <div className={styles.gameFrame}>
-      <div className={styles.container}>
-        {/* BỎ tiêu đề khỏi khung game - sẽ hiển thị từ App.js */}
+    <div className={styles.gameWrapper}>
+      {/* Tiêu đề game nằm ngoài gameFrame */}
+      <h3 className={styles.gameTitle}>Glass Bridge</h3>
 
-        <p className={styles.timer}>⏳ Time left: {timeLeft}s</p>
+      <div className={styles.gameFrame}>
+        <div className={styles.container}>
+          <p className={styles.timer}>⏳ Time left: {timeLeft}s</p>
 
-        {countdown !== null && (
-          <div className={styles.countdown}>⏳ {countdown}</div>
-        )}
-
-        <div className={`${styles.bridgeTrack}`} ref={bridgeRef}>
-          <div className={styles.logosentient}>SENTIENT</div>
-          {bridge.map((_, index) => (
-            <div
-              key={index}
-              className={styles.bridgeRow}
-              ref={(el) => (rowRefs.current[index] = el)}
-            >
-              <div
-                className={`${styles.glassPanel} ${
-                  glassStatus[index] === "left"
-                    ? styles.correct
-                    : glassStatus[index] === "wrong-left"
-                    ? styles.wrong
-                    : ""
-                }`}
-              />
-              <div
-                className={`${styles.glassPanel} ${
-                  glassStatus[index] === "right"
-                    ? styles.correct
-                    : glassStatus[index] === "wrong-right"
-                    ? styles.wrong
-                    : ""
-                }`}
-              />
-            </div>
-          ))}
-
-          {gameStarted && currentRow !== null && (
-            <img
-              src={mascotImage}
-              alt="Mascot"
-              className={`${styles.mascot} ${isFalling ? styles.falling : ""}`}
-              style={{
-                position: "absolute",
-                top: mascotPos.top,
-                left: mascotPos.left,
-                transform: "translate(-50%, -50%)",
-                transition: isFalling
-                  ? "none"
-                  : "top 0.3s ease, left 0.3s ease",
-              }}
-            />
+          {countdown !== null && (
+            <div className={styles.countdown}>⏳ {countdown}</div>
           )}
 
-          {!gameStarted || currentRow === null ? (
-            <div className={styles.startingArea}>
+          <div className={styles.bridgeTrack} ref={bridgeRef}>
+            <div className={styles.logosentient}>SENTIENT</div>
+
+            {bridge.map((_, index) => (
+              <div
+                key={index}
+                className={styles.bridgeRow}
+                ref={(el) => (rowRefs.current[index] = el)}
+              >
+                <div
+                  className={`${styles.glassPanel} ${
+                    glassStatus[index] === "left"
+                      ? styles.correct
+                      : glassStatus[index] === "wrong-left"
+                      ? styles.wrong
+                      : ""
+                  }`}
+                />
+                <div
+                  className={`${styles.glassPanel} ${
+                    glassStatus[index] === "right"
+                      ? styles.correct
+                      : glassStatus[index] === "wrong-right"
+                      ? styles.wrong
+                      : ""
+                  }`}
+                />
+              </div>
+            ))}
+
+            {gameStarted && currentRow !== null && (
               <img
                 src={mascotImage}
                 alt="Mascot"
-                className={styles.mascotStart}
+                className={`${styles.mascot} ${
+                  isFalling ? styles.falling : ""
+                }`}
+                style={{
+                  position: "absolute",
+                  top: mascotPos.top,
+                  left: mascotPos.left,
+                  transform: "translate(-50%, -50%)",
+                  transition: isFalling
+                    ? "none"
+                    : "top 0.3s ease, left 0.3s ease",
+                }}
               />
-            </div>
-          ) : null}
-        </div>
+            )}
 
-        <div className={styles.buttonPanel}>
-          {!showWinPopup && !showGameOverPopup && (
-            <div className={styles.directionButtons}>
-              <button
-                onClick={() => handleStep("left")}
-                disabled={
-                  !gameStarted || gameOver || hasWon || countdown !== null
-                }
-                className={styles.actionButton}
-              >
-                LEFT
+            {!gameStarted || currentRow === null ? (
+              <div className={styles.startingArea}>
+                <img
+                  src={mascotImage}
+                  alt="Mascot"
+                  className={styles.mascotStart}
+                />
+              </div>
+            ) : null}
+          </div>
+
+          <div className={styles.buttonPanel}>
+            {!showWinPopup && !showGameOverPopup && (
+              <div className={styles.directionButtons}>
+                <button
+                  onClick={() => handleStep("left")}
+                  disabled={
+                    !gameStarted || gameOver || hasWon || countdown !== null
+                  }
+                  className={styles.actionButton}
+                >
+                  LEFT
+                </button>
+                <button
+                  onClick={() => handleStep("right")}
+                  disabled={
+                    !gameStarted || gameOver || hasWon || countdown !== null
+                  }
+                  className={styles.actionButton}
+                >
+                  RIGHT
+                </button>
+              </div>
+            )}
+
+            {!gameStarted && countdown === null && (
+              <button onClick={handleReady} className={styles.readyButton}>
+                READY
               </button>
-              <button
-                onClick={() => handleStep("right")}
-                disabled={
-                  !gameStarted || gameOver || hasWon || countdown !== null
-                }
-                className={styles.actionButton}
-              >
-                RIGHT
-              </button>
+            )}
+          </div>
+
+          {showWinPopup && (
+            <div className={styles.popupOverlay}>
+              <div className={styles.popup}>
+                <h2>🎉 You Won!</h2>
+                <p>Do you want to continue?</p>
+                <div className={styles.popupButtons}>
+                  <button onClick={onWin} className={styles.popupContinue}>
+                    Continue
+                  </button>
+                  <button onClick={onExit} className={styles.popupExit}>
+                    Exit
+                  </button>
+                </div>
+              </div>
             </div>
           )}
 
-          {!gameStarted && countdown === null && (
-            <button onClick={handleReady} className={styles.readyButton}>
-              READY
-            </button>
+          {showGameOverPopup && (
+            <div className={styles.popupOverlay}>
+              <div className={styles.popup}>
+                <h2>💀 Game Over</h2>
+                <p>You lost!</p>
+                <div className={styles.popupButtons}>
+                  <button onClick={onExit} className={styles.popupExit}>
+                    Try Again
+                  </button>
+                </div>
+              </div>
+            </div>
           )}
         </div>
-
-        {showWinPopup && (
-          <div className={styles.popupOverlay}>
-            <div className={styles.popup}>
-              <h2>🎉 You Won!</h2>
-              <p>Do you want to continue?</p>
-              <div className={styles.popupButtons}>
-                <button onClick={onWin} className={styles.popupContinue}>
-                  Continue
-                </button>
-                <button onClick={onExit} className={styles.popupExit}>
-                  Exit
-                </button>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {showGameOverPopup && (
-          <div className={styles.popupOverlay}>
-            <div className={styles.popup}>
-              <h2>💀 Game Over</h2>
-              <p>You lost!</p>
-              <div className={styles.popupButtons}>
-                <button onClick={onExit} className={styles.popupExit}>
-                  Try Again
-                </button>
-              </div>
-            </div>
-          </div>
-        )}
       </div>
     </div>
   );
