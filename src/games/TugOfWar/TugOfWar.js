@@ -8,10 +8,14 @@ const KEY_POOL = [
   "ArrowDown",
   "ArrowLeft",
   "ArrowRight",
-  "I",
-  "R",
-  "Y",
   "S",
+  "E",
+  "N",
+  "T",
+  "I",
+  "E",
+  "N",
+  "T",
 ];
 const MAX_PULL = 10;
 const PULL_UNIT = 10; // px per move
@@ -155,7 +159,7 @@ export default function TugOfWar({ onWin, onExit }) {
       screamAudio.current?.play();
       setTimeout(() => {
         lostAudio.current?.play();
-      }, 400); // Delay để scream nghe rõ
+      }, 400);
 
       setTimeout(() => {
         setShowGameOverPopup(true);
@@ -186,8 +190,8 @@ export default function TugOfWar({ onWin, onExit }) {
 
       <div className={styles.battlefield}>
         <div className={styles.bridge}>
-          <div className={styles.bridgeSide}>IRYS</div>
-          <div className={styles.bridgeSide}>IRYS</div>
+          <div className={styles.bridgeSide}>SENTIENT</div>
+          <div className={styles.bridgeSide}>SENTIENT</div>
         </div>
 
         <div
