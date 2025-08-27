@@ -22,7 +22,16 @@ function RedLightGreenLight({ onWin, onExit, mascot }) {
   const [isFalling, setIsFalling] = useState(false);
   const [isWinning, setIsWinning] = useState(false);
   const dollRef = useRef(null);
+  const trackRef = useRef(null);
   const mascotImage = mascot === "x" ? mascotX : mascotO;
+
+  const getWinPosition = () => {
+    if (trackRef.current) {
+      const trackHeight = trackRef.current.offsetHeight;
+      return trackHeight * 0.86; // 86% của chiều cao track
+    }
+    return 330; // Fallback value
+  };
 
   useEffect(() => {
     if (!isStarted || gameOver || countdown !== null || isWinning) return;
@@ -120,7 +129,9 @@ function RedLightGreenLight({ onWin, onExit, mascot }) {
       const newPos = position + step;
       setPosition(newPos);
 
-      if (newPos >= 330) {
+      const winPosition = getWinPosition();
+
+      if (newPos >= winPosition) {
         music.pause();
         setIsWinning(true);
         const winSound = new Audio("/sounds/win.mp3");
@@ -177,7 +188,7 @@ function RedLightGreenLight({ onWin, onExit, mascot }) {
           <div className={styles.countdown}>⏳ {countdown}</div>
         )}
 
-        <div className={`${styles.track} ${styles.vertical}`}>
+        <div ref={trackRef} className={`${styles.track} ${styles.vertical}`}>
           <div className={styles.finishLine}></div>
 
           <img

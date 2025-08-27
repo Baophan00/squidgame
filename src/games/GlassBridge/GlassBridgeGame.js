@@ -4,7 +4,7 @@ import mascotX from "../../assets/images/mascot-x.png";
 import mascotO from "../../assets/images/mascot-o.png";
 
 const bridgeLength = 5;
-const timeLimit = 25;
+const timeLimit = 60;
 
 function GlassBridgeGame({ onWin, onExit, mascot }) {
   const mascotImage = mascot === "x" ? mascotX : mascotO;

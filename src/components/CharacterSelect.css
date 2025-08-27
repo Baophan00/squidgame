@@ -26,3 +26,21 @@
 .char-box img {
   height: 120px;
 }
+
+.select-container h2 {
+  color: black;
+}
+
+.select-container h2 {
+  color: black;
+  font-weight: bold;
+  animation: electricBlink 0.15s infinite;
+}
+
+@keyframes electricBlink {
+  0% { text-shadow: 0 0 2px #00ffcc, 0 0 5px #00ffcc; }
+  25% { text-shadow: 0 0 4px #00ffcc, 0 0 10px #00ffcc; }
+  50% { text-shadow: 0 0 2px #00ffcc, 0 0 5px #00ffcc; }
+  75% { text-shadow: 0 0 6px #00ffcc, 0 0 12px #00ffcc; }
+  100% { text-shadow: 0 0 2px #00ffcc, 0 0 5px #00ffcc; }
+}

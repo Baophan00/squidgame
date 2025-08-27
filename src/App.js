@@ -6,7 +6,7 @@ import GlassBridge from "./games/GlassBridge";
 import logo from "./assets/images/logo.jpg";
 
 function App() {
-  const [level, setLevel] = useState(3);
+  const [level, setLevel] = useState(1);
   const [character, setCharacter] = useState(null);
   const [isMobile, setIsMobile] = useState(window.innerWidth < 600);
   const [showComingSoon, setShowComingSoon] = useState(false);
