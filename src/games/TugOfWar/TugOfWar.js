@@ -5,10 +5,10 @@ import aiImg from "../../assets/images/sentientbot.png";
 import logo from "../../assets/images/logo.jpg"; // ✅ Import logo
 
 const KEY_POOL = [
-  "ArrowUp",
-  "ArrowDown",
-  "ArrowLeft",
-  "ArrowRight",
+  // "ArrowUp",
+  // "ArrowDown",
+  // "ArrowLeft",
+  // "ArrowRight",
   "S",
   "E",
   "N",
