@@ -30,13 +30,43 @@ border-radius: 16px;
   color: var(--primary-dark);
 }
 
-.countdown {
+/* .countdown {
   font-size: 4rem;
   font-weight: bold;
   color: var(--danger);
   animation: pulse 1s infinite;
   margin-bottom: 20px;
+} */
+
+
+.countdown {
+  position: fixed;            /* luôn overlay toàn màn hình, không phụ thuộc game container */
+  top: 50%;                   /* căn giữa dọc */
+  left: 50%;                  /* căn giữa ngang */
+  transform: translate(-50%, -50%);
+  margin: 0;
+  padding: 0;
+
+  font-size: clamp(3rem, 10vw, 8rem); /* chữ responsive: nhỏ nhất 3rem, lớn nhất 8rem */
+  font-weight: 900;
+  font-family: "Arial Black", Impact, sans-serif;
+  color: #ff3333;
+  text-shadow: 0 0 20px rgba(0,0,0,0.7), 0 0 40px rgba(255,0,0,0.5);
+
+  animation: popScale 0.8s ease forwards;
+  z-index: 9999;
+  pointer-events: none;
 }
+
+
+/* Mobile – nhỏ thêm một chút */
+@media (max-width: 600px) {
+  .countdown {
+    font-size: 1.6rem;
+    top: 26%;
+  }
+}
+
 
 @keyframes pulse {
   0% { transform: scale(1); }
@@ -91,6 +121,11 @@ border-radius: 16px;
   height: auto;
   transition: transform 0.5s ease;
 }
+
+  .mascotLeft {
+    width: 120px; /* 100px desktop * 0.86 = 60px */
+    height: auto;
+  }
 
 .fallDown {
   transform: translateY(150px) rotate(30deg);
@@ -426,9 +461,15 @@ border-radius: 16px;
     pointer-events: none;
   }
 
-  .mascotLeft,
+  /* .mascotLeft, */
   .mascotRight {
     width: 60px; /* 100px desktop * 0.86 = 60px */
+    height: auto;
+  }
+
+
+  .mascotLeft {
+    width: 80px; /* 100px desktop * 0.86 = 60px */
     height: auto;
   }
 

@@ -166,8 +166,8 @@ function GlassBridgeGame({ onWin, onExit, mascot }) {
   return (
     <div className={styles.gameFrame}>
       <div className={styles.container}>
-        <h3 className={styles.title}>Glass Bridge</h3>
-        {/* <div className={styles.logoIrys}>IRYS</div> */}
+        {/* BỎ tiêu đề khỏi khung game - sẽ hiển thị từ App.js */}
+
         <p className={styles.timer}>⏳ Time left: {timeLeft}s</p>
 
         {countdown !== null && (
@@ -175,7 +175,7 @@ function GlassBridgeGame({ onWin, onExit, mascot }) {
         )}
 
         <div className={`${styles.bridgeTrack}`} ref={bridgeRef}>
-          <div className={styles.logoIrys}>IRYS</div>
+          <div className={styles.logosentient}>SENTIENT</div>
           {bridge.map((_, index) => (
             <div
               key={index}

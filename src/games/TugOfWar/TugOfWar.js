@@ -191,7 +191,7 @@ export default function TugOfWar({ onWin, onExit }) {
 
       <div className={styles.battlefield}>
         {/* ✅ Logo in battlefield */}
-        <img src={logo} alt="Project Logo" className={styles.gameLogo} />
+        {/* <img src={logo} alt="Project Logo" className={styles.gameLogo} /> */}
 
         <div className={styles.bridge}>
           <div className={styles.bridgeSide}>SENTIENT</div>
