@@ -1,102 +1,20 @@
-/* App.css
-
-body {
-  margin: 0;
-  padding: 0;
-  font-family: 'Segoe UI', sans-serif;
-  background-color: #111;
-  color: #fff;
-}
-
-.container {
-  text-align: center;
-  margin-top: 60px;
-  padding: 0 20px;
-}
-
-h1 {
-  font-size: 2.8rem;
-  margin-bottom: 30px;
-  color: #ff4e4e;
-  text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
-}
-
-.light {
-  width: 160px;
-  height: 160px;
-  border-radius: 50%;
-  margin: 20px auto;
-  font-size: 24px;
-  font-weight: bold;
-  line-height: 160px;
-  color: white;
-  text-transform: uppercase;
-  box-shadow: 0 0 25px rgba(255, 255, 255, 0.4);
-  transition: background-color 0.5s ease, box-shadow 0.5s ease;
-}
-
-.light.green {
-  background-color: #2ecc71;
-  box-shadow: 0 0 35px rgba(46, 204, 113, 0.8);
-}
-
-.light.red {
-  background-color: #e74c3c;
-  box-shadow: 0 0 35px rgba(231, 76, 60, 0.8);
-}
-
-p {
-  font-size: 18px;
-  margin-top: 15px;
-}
-
-button {
-  font-size: 20px;
-  padding: 12px 28px;
-  margin: 12px;
-  border: none;
-  border-radius: 10px;
-  background-color: #00b4d8;
-  color: white;
-  cursor: pointer;
-  transition: background-color 0.3s ease, transform 0.1s ease;
-}
-
-button:hover {
-  background-color: #0096c7;
-  transform: scale(1.05);
-}
-
-button:disabled {
-  background-color: #555;
-  cursor: not-allowed;
-}
-
-@media (max-width: 500px) {
-  h1 {
-    font-size: 2rem;
-  }
-
-  .light {
-    width: 120px;
-    height: 120px;
-    line-height: 120px;
-    font-size: 20px;
-  }
-
-  button {
-    font-size: 16px;
-    padding: 10px 20px;
-  }
-
-  p {
-    font-size: 16px;
-  }
-}
-
-.timer {
-  font-size: 22px;
-  margin: 10px 0;
-  color: #ffdd57;
-  font-weight: bold;
-} */
+<h2
+  style={{
+    display: "flex",
+    alignItems: "center",
+    color: "#000", // chữ màu đen
+  }}
+>
+  <img
+    src={logo}
+    alt="Project Logo"
+    style={{
+      width: "40px",
+      height: "40px",
+      marginRight: "10px",
+      borderRadius: "6px",
+      objectFit: "cover",
+    }}
+  />
+  SENTIENT GAME – Level {level}
+</h2>

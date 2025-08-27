@@ -4,6 +4,8 @@ import mascotX from "../../assets/images/mascot-x.png";
 import mascotO from "../../assets/images/mascot-o.png";
 import dollImage from "../../assets/images/doll.png";
 import guardImage from "../../assets/images/guard.png";
+// import logo từ đây nếu muốn dùng ở ngoài container
+// import logo from "../../assets/images/logo.jpg";
 
 const music = new Audio("/sounds/mugunghwa.mp3");
 music.loop = true;
@@ -26,7 +28,6 @@ function RedLightGreenLight({ onWin, onExit, mascot }) {
     if (!isStarted || gameOver || countdown !== null || isWinning) return;
 
     let timeout;
-
     const toggleLight = () => {
       setLight((prev) => {
         const next = prev === "green" ? "red" : "green";
@@ -42,10 +43,8 @@ function RedLightGreenLight({ onWin, onExit, mascot }) {
           music.pause();
           music.currentTime = 0;
         }
-
         return next;
       });
-
       timeout = setTimeout(toggleLight, Math.random() * 2000 + 3000);
     };
 
@@ -57,7 +56,6 @@ function RedLightGreenLight({ onWin, onExit, mascot }) {
     music.play();
 
     timeout = setTimeout(toggleLight, Math.random() * 2000 + 3000);
-
     return () => clearTimeout(timeout);
   }, [isStarted, gameOver, countdown, isWinning]);
 
@@ -164,58 +162,63 @@ function RedLightGreenLight({ onWin, onExit, mascot }) {
   };
 
   return (
-    <div className={styles.gameContainer}>
-      <h3>Red Light – Green Light</h3>
+    <div className={styles.gameWrapper}>
+      {/* Chữ ngoài container */}
+      <h3 style={{ color: "#000", textAlign: "center", marginBottom: "10px" }}>
+        Red Light – Green Light
+      </h3>
 
-      <div className={styles.lightBox}>
-        <div className={`${styles.circle} ${styles[light]}`}></div>
-      </div>
-
-      {countdown !== null && (
-        <div className={styles.countdown}>⏳ {countdown}</div>
-      )}
-
-      <div className={`${styles.track} ${styles.vertical}`}>
-        <div className={styles.finishLine}></div>
-
-        <img
-          src={mascotImage}
-          className={`${styles.mascot} ${isFalling ? styles.fallen : ""}`}
-          style={{ bottom: `${position}px` }}
-          alt="Player"
-        />
-
-        <div className={styles.finishLineVertical}>
-          <img
-            src={dollImage}
-            alt="Doll"
-            className={`${styles.doll} turn`}
-            ref={dollRef}
-          />
-          <img
-            src={guardImage}
-            alt="Guard Left"
-            className={`${styles.guard} ${styles.left}`}
-          />
-          <img
-            src={guardImage}
-            alt="Guard Right"
-            className={`${styles.guard} ${styles.right}`}
-          />
+      <div className={styles.gameContainer}>
+        <div className={styles.lightBox}>
+          <div className={`${styles.circle} ${styles[light]}`}></div>
         </div>
-      </div>
 
-      <p>⏳ Time left: {timeLeft}s</p>
-      <div className={styles.buttons}>
-        <button onClick={handleRun} disabled={gameOver || isWinning}>
-          RUN
-        </button>
-        <button
-          onClick={handleReset}
-          disabled={isStarted || countdown !== null}
-        >
-          READY
-        </button>
+        {countdown !== null && (
+          <div className={styles.countdown}>⏳ {countdown}</div>
+        )}
+
+        <div className={`${styles.track} ${styles.vertical}`}>
+          <div className={styles.finishLine}></div>
+
+          <img
+            src={mascotImage}
+            className={`${styles.mascot} ${isFalling ? styles.fallen : ""}`}
+            style={{ bottom: `${position}px` }}
+            alt="Player"
+          />
+
+          <div className={styles.finishLineVertical}>
+            <img
+              src={dollImage}
+              alt="Doll"
+              className={`${styles.doll} turn`}
+              ref={dollRef}
+            />
+            <img
+              src={guardImage}
+              alt="Guard Left"
+              className={`${styles.guard} ${styles.left}`}
+            />
+            <img
+              src={guardImage}
+              alt="Guard Right"
+              className={`${styles.guard} ${styles.right}`}
+            />
+          </div>
+        </div>
+
+        <p>⏳ Time left: {timeLeft}s</p>
+        <div className={styles.buttons}>
+          <button onClick={handleRun} disabled={gameOver || isWinning}>
+            RUN
+          </button>
+          <button
+            onClick={handleReset}
+            disabled={isStarted || countdown !== null}
+          >
+            READY
+          </button>
+        </div>
       </div>
 
       {showWinPopup && (

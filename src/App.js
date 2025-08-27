@@ -5,27 +5,55 @@ import TugOfWar from "./games/TugOfWar";
 import GlassBridge from "./games/GlassBridge";
 import Marbles from "./games/Marbles";
 import FinalGame from "./games/FinalGame";
+import logo from "./assets/images/logo.jpg"; // logo dùng cho toàn app
 
 function App() {
-  const [level, setLevel] = useState(2); // ✅ bắt đầu từ level 1
-  const [character, setCharacter] = useState(null); // 🧍‍♂️ chọn nhân vật
+  const [level, setLevel] = useState(1); // Start from level 1
+  const [character, setCharacter] = useState(null); // Selected character
 
   const nextLevel = () => setLevel((prev) => prev + 1);
 
   const handleExit = () => {
-    setCharacter(null); // Quay về màn chọn nhân vật
-    setLevel(1); // Reset level về 1
+    setCharacter(null); // Quay lại chọn nhân vật
+    setLevel(1); // Reset level
   };
 
-  // Nếu chưa chọn nhân vật thì hiển thị màn chọn
+  // Nếu chưa chọn nhân vật, hiển thị màn hình chọn nhân vật
   if (!character) {
     return <CharacterSelect onSelect={setCharacter} />;
   }
 
   return (
-    <div>
-      <h2>🕹 SQUID GAME – Level {level}</h2>
+    <div style={{ textAlign: "center", position: "relative" }}>
+      {/* Logo góc trái */}
+      <img
+        src={logo}
+        alt="logo"
+        style={{
+          position: "absolute",
+          top: "10px",
+          left: "10px",
+          width: "60px",
+          height: "auto",
+          zIndex: 10,
+        }}
+      />
 
+      {/* Tiêu đề chính */}
+      <h2
+        style={{
+          color: "#000",
+          backgroundColor: "#f7f7f7",
+          display: "inline-block",
+          padding: "8px 16px",
+          borderRadius: "12px",
+          marginTop: "20px",
+        }}
+      >
+        SENTIENT GAME – Level {level}
+      </h2>
+
+      {/* Game theo level */}
       {level === 1 && (
         <RedLightGreenLight
           onWin={nextLevel}

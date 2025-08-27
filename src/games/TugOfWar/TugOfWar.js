@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useRef } from "react";
 import styles from "./TugOfWar.module.css";
 import playerImg from "../../assets/images/mascot-o.png";
-import aiImg from "../../assets/images/xaitoshiAI.png";
+import aiImg from "../../assets/images/sentientbot.png";
+import logo from "../../assets/images/logo.jpg"; // ✅ Import logo
 
 const KEY_POOL = [
   "ArrowUp",
@@ -189,6 +190,9 @@ export default function TugOfWar({ onWin, onExit }) {
       </div>
 
       <div className={styles.battlefield}>
+        {/* ✅ Logo in battlefield */}
+        <img src={logo} alt="Project Logo" className={styles.gameLogo} />
+
         <div className={styles.bridge}>
           <div className={styles.bridgeSide}>SENTIENT</div>
           <div className={styles.bridgeSide}>SENTIENT</div>
@@ -198,7 +202,7 @@ export default function TugOfWar({ onWin, onExit }) {
           className={styles.characters}
           style={{
             left: "50%",
-            top: "50%",
+            top: "45%",
             transform: `translate(calc(-50% + ${scaledOffset}px), -50%)`,
           }}
         >
