@@ -1,26 +1,12 @@
 import React, { useState, useEffect, useRef } from "react";
 import styles from "./TugOfWar.module.css";
-import playerImg from "../../assets/images/mascot-o.png";
 import aiImg from "../../assets/images/sentientbot.png";
 import logo from "../../assets/images/logo.jpg"; // ✅ Import logo
 
-const KEY_POOL = [
-  // "ArrowUp",
-  // "ArrowDown",
-  // "ArrowLeft",
-  // "ArrowRight",
-  "S",
-  "E",
-  "N",
-  "T",
-  "I",
-  "E",
-  "N",
-  "T",
-];
+const KEY_POOL = ["S", "E", "N", "T", "I", "E", "N", "T"];
 const MAX_PULL = 10;
 const PULL_UNIT = 10; // px per move
-const DESKTOP_WIDTH = 700; // width battlefield desktop (theo CSS thiết kế)
+const DESKTOP_WIDTH = 700;
 
 function getRandomSequence(length = 4) {
   return Array.from(
@@ -35,7 +21,8 @@ function getScaledOffset(position) {
   return position * PULL_UNIT * scale;
 }
 
-export default function TugOfWar({ onWin, onExit }) {
+// ✅ Thêm prop mascot
+export default function TugOfWar({ onWin, onExit, mascot }) {
   const [gameStarted, setGameStarted] = useState(false);
   const [countdown, setCountdown] = useState(0);
   const [sequence, setSequence] = useState([]);
@@ -53,19 +40,23 @@ export default function TugOfWar({ onWin, onExit }) {
   const lostAudio = useRef(null);
   const screamAudio = useRef(null);
 
+  // ✅ Chọn ảnh player dựa trên mascot
+  const playerImg =
+    mascot === "x"
+      ? require("../../assets/images/mascot-x.png")
+      : require("../../assets/images/mascot-o.png");
+
   useEffect(() => {
     winAudio.current = new Audio("/sounds/win.mp3");
     lostAudio.current = new Audio("/sounds/lost.mp3");
     screamAudio.current = new Audio("/sounds/scream.mp3");
   }, []);
 
-  // Update scaledOffset khi position hoặc kích thước màn thay đổi
   useEffect(() => {
     function updateOffset() {
       setScaledOffset(getScaledOffset(position));
     }
     updateOffset();
-
     window.addEventListener("resize", updateOffset);
     return () => window.removeEventListener("resize", updateOffset);
   }, [position]);
@@ -155,13 +146,10 @@ export default function TugOfWar({ onWin, onExit }) {
       }, 1200);
     } else {
       setFallAnimation("playerFallRight");
-
-      // Phát tiếng hét rồi mới phát tiếng thua
       screamAudio.current?.play();
       setTimeout(() => {
         lostAudio.current?.play();
       }, 400);
-
       setTimeout(() => {
         setShowGameOverPopup(true);
       }, 1200);
@@ -190,9 +178,6 @@ export default function TugOfWar({ onWin, onExit }) {
       </div>
 
       <div className={styles.battlefield}>
-        {/* ✅ Logo in battlefield */}
-        {/* <img src={logo} alt="Project Logo" className={styles.gameLogo} /> */}
-
         <div className={styles.bridge}>
           <div className={styles.bridgeSide}>SENTIENT</div>
           <div className={styles.bridgeSide}>SENTIENT</div>
@@ -206,6 +191,7 @@ export default function TugOfWar({ onWin, onExit }) {
             transform: `translate(calc(-50% + ${scaledOffset}px), -50%)`,
           }}
         >
+          {/* ✅ Sử dụng playerImg dựa trên mascot */}
           <img
             src={playerImg}
             alt="player"
